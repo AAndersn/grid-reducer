@@ -1,0 +1,52 @@
+# OpenDSS deck IEEE13_CDPSM
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#master
+# not mapped: Relay 1
+
+Profile = cim18v17
+Authority = https://github.com/PNNL-CIM-Tools/CIMHub
+Model = IEEE13_CDPSM
+
+Object Substation: mRID=sub_ieee13nodeckt, name=IEEE13Nodeckt
+
+Object Feeder: mRID=fdr_ieee13nodeckt, name=IEEE13Nodeckt, NormalEnergizingSubstation=sub_ieee13nodeckt
+
+# defaulted: defaultbasefreq=60.0
+Object BaseFrequency: mRID=bf_60hz, frequency (Hz)=60.0
+
+# voltagebases: 115.0, 4.16, 13.2, 0.48, 0.208; on no bus: 0.208; not in voltagebases: 0.24
+Table BaseVoltage: mRID, nominalVoltage (kV)
+    bv_115kv,  115.0
+    bv_13p2kv, 13.2
+    bv_4p16kv, 4.16
+    bv_480v,   0.48
+    bv_240v,   0.24
+
+Table OperationalLimitType: mRID, name, durationKind, isInfiniteDuration, direction
+    olt_normal,    normal,    normal,    true,  absoluteValue
+    olt_emergency, emergency, emergency, false, absoluteValue
+
+Import bus.cimtbl
+
+Import zip_fractions.cimtbl
+
+Import linecode.cimtbl
+
+Import xfmrcode.cimtbl
+
+Import vsource.cimtbl
+
+Import line.cimtbl
+
+Import transformer.cimtbl
+
+Import regcontrol.cimtbl
+
+Import load.cimtbl
+
+Import capacitor.cimtbl
+
+Import pvsystem.cimtbl
+
+Import storage.cimtbl
+
+Import buscoords.cimtbl

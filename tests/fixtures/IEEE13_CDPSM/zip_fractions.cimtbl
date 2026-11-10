@@ -1,0 +1,8 @@
+# Constant power, impedance and current load models, shared by every distribution spoke (cimhub_core.load_response).
+
+Profile = cim18v17
+
+Table LoadResponseCharacteristic: mRID, exponentModel, pConstantPower, pConstantCurrent, pConstantImpedance, qConstantPower, qConstantCurrent, qConstantImpedance
+    zip_constant_pq, false, 1, 0, 0, 1, 0, 0
+    zip_constant_z,  false, 0, 0, 1, 0, 0, 1
+    zip_constant_i,  false, 0, 1, 0, 0, 1, 0

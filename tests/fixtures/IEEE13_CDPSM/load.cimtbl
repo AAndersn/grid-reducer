@@ -1,0 +1,41 @@
+# OpenDSS Load -> EnergyConsumer on its bus (DSS-7); p, q as given (q from pf when kvar is unset).
+# Models 1, 2, 5 name the shared zip_fractions rows; model 4 an exp_<CVRwatts>_<CVRvars> row here.
+# Source table: Load (records: 16)
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#load
+
+Profile = cim18v17
+
+Table EnergyConsumer: mRID, name, node, phases, phaseConnection, grounded, p (kW), q (kVAr), customerCount, LoadResponse, normallyInService, BaseVoltage, EquipmentContainer=fdr_ieee13nodeckt
+    # defaulted: NumCust=1, enabled=true
+    ld_611,   611,   611,   C,    Y, true,  170.0,  80.0,               1, zip_constant_i,  true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    ld_634a,  634a,  634,   A,    Y, true,  160.0,  110.0,              1, zip_constant_pq, true, bv_480v
+    # defaulted: NumCust=1, enabled=true
+    ld_634b,  634b,  634,   B,    Y, true,  120.0,  90.0,               1, zip_constant_pq, true, bv_480v
+    # defaulted: NumCust=1, enabled=true
+    ld_634c,  634c,  634,   C,    Y, true,  120.0,  90.0,               1, zip_constant_pq, true, bv_480v
+    # defaulted: NumCust=1, enabled=true
+    ld_645,   645,   645,   B,    Y, true,  170.0,  125.0,              1, zip_constant_pq, true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    ld_646,   646,   646,   BC,   D, false, 230.0,  132.0,              1, zip_constant_z,  true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    ld_652,   652,   652,   A,    Y, true,  128.0,  86.0,               1, zip_constant_z,  true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    ld_670a,  670a,  670,   A,    Y, true,  17.0,   10.0,               1, zip_constant_pq, true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    ld_670b,  670b,  670,   B,    Y, true,  66.0,   38.0,               1, zip_constant_pq, true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    ld_670c,  670c,  670,   C,    Y, true,  117.0,  68.0,               1, zip_constant_pq, true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    ld_671,   671,   671,   ,     D, false, 1155.0, 660.0,              1, zip_constant_pq, true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    ld_675a,  675a,  675,   A,    Y, true,  485.0,  190.0,              1, zip_constant_pq, true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    ld_675b,  675b,  675,   B,    Y, true,  68.0,   60.0,               1, zip_constant_pq, true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    ld_675c,  675c,  675,   C,    Y, true,  290.0,  212.0,              1, zip_constant_pq, true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    ld_692,   692,   692,   CA,   D, false, 170.0,  151.0,              1, zip_constant_i,  true, bv_4p16kv
+    # defaulted: NumCust=1, enabled=true
+    # untranscribed: Vminpu=0.88
+    ld_house, House, house, s1s2, Y, true,  5.0,    3.0987216920155114, 1, zip_constant_pq, true, bv_240v

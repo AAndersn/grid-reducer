@@ -1,0 +1,15 @@
+# A breaker with protection function blocks. FunctionOutputVariable points at a plain FunctionBlock:
+# cimtables cannot yet resolve a reference to a subclass instance (an OverCurrentProtectionFunctionBlock).
+
+Profile = cim18v17
+Authority = https://example.org
+Model = protection
+
+Object Feeder: mRID=fdr
+Object CoordinateSystem: mRID=crs, crsUrn=OpenDSSLocalBusCoordinates
+Table Breaker: mRID, node1, node2, phases, EquipmentContainer, wkt
+    br1, n0, n1, ABC, fdr, "LINESTRING (0 0, 0 1)"
+Object FunctionBlock: mRID=fb_51, name=51P
+Object OverCurrentProtectionFunctionBlock: mRID=fb_50, name=50P
+Table FunctionOutputVariable: mRID, FunctionBlock
+    fb_51_trip, fb_51

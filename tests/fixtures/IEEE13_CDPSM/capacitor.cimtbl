@@ -1,0 +1,13 @@
+# OpenDSS Capacitor -> LinearShuntCompensator on its bus: one section, nomQ and nomU as rated,
+# bPerSection = nomQ / nomU^2. A CapControl adds the control by an Update in capcontrol.cimtbl.
+# Source table: Capacitor (records: 2)
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#capacitor
+
+Profile = cim18v17
+
+# derived: bPerSection = nomQ / nomU^2 (b_per_section); sections = normalSections = the steps states closes
+Table LinearShuntCompensator: mRID, name, node, phases, phaseConnection, grounded, nomQ (kVAr), nomU (kV), bPerSection (S), maximumSections, normalSections, sections, normallyInService, BaseVoltage, EquipmentContainer=fdr_ieee13nodeckt
+    # defaulted: conn=wye, Numsteps=1, enabled=true
+    cap_cap1, Cap1, 675, ,  Y, true, 600.0, 4.16, 0.03467085798816568,  1, 1, 1, true, bv_4p16kv
+    # defaulted: conn=wye, Numsteps=1, enabled=true
+    cap_cap2, Cap2, 611, C, Y, true, 100.0, 2.4,  0.017361111111111112, 1, 1, 1, true, bv_4p16kv

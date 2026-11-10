@@ -1,0 +1,28 @@
+# Bus voltages from the topology walk (cimtopology.core) from the source buses; 22 buses.
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#buses
+
+Profile = cim18v17
+
+Table ConnectivityNode: mRID, name, BaseVoltage, ConnectivityNodeContainer=fdr_ieee13nodeckt
+    sourcebus, sourcebus, bv_115kv
+    650z,      650z,      bv_13p2kv
+    611,       611,       bv_4p16kv
+    632,       632,       bv_4p16kv
+    633,       633,       bv_4p16kv
+    645,       645,       bv_4p16kv
+    646,       646,       bv_4p16kv
+    650,       650,       bv_4p16kv
+    652,       652,       bv_4p16kv
+    670,       670,       bv_4p16kv
+    671,       671,       bv_4p16kv
+    675,       675,       bv_4p16kv
+    680,       680,       bv_4p16kv
+    684,       684,       bv_4p16kv
+    692,       692,       bv_4p16kv
+    brkr,      brkr,      bv_4p16kv
+    mid,       mid,       bv_4p16kv
+    rg60,      rg60,      bv_4p16kv
+    tap,       tap,       bv_4p16kv
+    xf1,       xf1,       bv_4p16kv
+    634,       634,       bv_480v
+    house,     house,     bv_240v

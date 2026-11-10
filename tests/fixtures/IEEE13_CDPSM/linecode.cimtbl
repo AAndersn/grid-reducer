@@ -1,0 +1,51 @@
+# OpenDSS LineCode -> PerLengthPhaseImpedance + PhaseImpedanceData, PerLengthSequenceImpedance (catalog).
+# Source table: LineCode (records: 7)
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#linecode
+
+Profile = cim18v17
+
+Table PerLengthPhaseImpedance: mRID, name, conductorCount, calculatedFrequency (Hz)
+    # untranscribed: normamps=730.0
+    lc_mtx601, mtx601, 3, 60
+    # untranscribed: normamps=340.0
+    lc_mtx602, mtx602, 3, 60
+    # untranscribed: normamps=230.0
+    lc_mtx603, mtx603, 2, 60
+    # untranscribed: normamps=230.0
+    lc_mtx604, mtx604, 2, 60
+    # untranscribed: normamps=230.0
+    lc_mtx605, mtx605, 1, 60
+    # untranscribed: normamps=260.0
+    lc_mtx606, mtx606, 3, 60
+    # untranscribed: normamps=165.0
+    lc_mtx607, mtx607, 1, 60
+
+# units=mi. row/column are conductor indices of the lower triangle.
+# derived: b = 2 pi baseFreq C (b_from_c), from cmatrix (nF) -> nS
+Table PhaseImpedanceData: identifier, PhaseImpedance, row, column, r (ohm/mi), x (ohm/mi), b (nS/mi)
+    lc_mtx601_11, lc_mtx601, 1, 1, 0.3465,   1.0179,     0.0
+    lc_mtx601_21, lc_mtx601, 2, 1, 0.1535,   0.3849,     0.0
+    lc_mtx601_22, lc_mtx601, 2, 2, 0.3375,   1.0478,     0.0
+    lc_mtx601_31, lc_mtx601, 3, 1, 0.158,    0.4236,     0.0
+    lc_mtx601_32, lc_mtx601, 3, 2, 0.156,    0.5017,     0.0
+    lc_mtx601_33, lc_mtx601, 3, 3, 0.3414,   1.0348,     0.0
+    lc_mtx602_11, lc_mtx602, 1, 1, 0.7526,   1.1814,     0.0
+    lc_mtx602_21, lc_mtx602, 2, 1, 0.1535,   0.3849,     0.0
+    lc_mtx602_22, lc_mtx602, 2, 2, 0.7475,   1.1983,     0.0
+    lc_mtx602_31, lc_mtx602, 3, 1, 0.156,    0.5017,     0.0
+    lc_mtx602_32, lc_mtx602, 3, 2, 0.158,    0.4236,     0.0
+    lc_mtx602_33, lc_mtx602, 3, 3, 0.7436,   1.2112,     0.0
+    lc_mtx603_11, lc_mtx603, 1, 1, 1.3238,   1.3569,     0.0
+    lc_mtx603_21, lc_mtx603, 2, 1, 0.2066,   0.4591,     0.0
+    lc_mtx603_22, lc_mtx603, 2, 2, 1.3294,   1.3471,     0.0
+    lc_mtx604_11, lc_mtx604, 1, 1, 1.3238,   1.3569,     0.0
+    lc_mtx604_21, lc_mtx604, 2, 1, 0.2066,   0.4591,     0.0
+    lc_mtx604_22, lc_mtx604, 2, 2, 1.3294,   1.3471,     0.0
+    lc_mtx605_11, lc_mtx605, 1, 1, 1.3292,   1.3475,     0.0
+    lc_mtx606_11, lc_mtx606, 1, 1, 0.791721, 0.438352,   144744.98593925923
+    lc_mtx606_21, lc_mtx606, 2, 1, 0.318476, 0.0276838,  0.0
+    lc_mtx606_22, lc_mtx606, 2, 2, 0.781649, 0.396697,   144744.98593925923
+    lc_mtx606_31, lc_mtx606, 3, 1, 0.28345,  -0.0184204, 0.0
+    lc_mtx606_32, lc_mtx606, 3, 2, 0.318476, 0.0276838,  0.0
+    lc_mtx606_33, lc_mtx606, 3, 3, 0.791721, 0.438352,   144744.98593925923
+    lc_mtx607_11, lc_mtx607, 1, 1, 1.3425,   0.5124,     88969.90394966294

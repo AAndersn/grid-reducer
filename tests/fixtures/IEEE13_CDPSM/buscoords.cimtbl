@@ -1,0 +1,175 @@
+# OpenDSS bus coordinates -> a Location per equipment, a PositionPoint per Terminal at its bus.
+# Source table: Buscoords (records: 22)
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#buscoords
+
+Profile = cim18v17
+
+Object CoordinateSystem: mRID=crs_bus, name=BusCoords, crsUrn=OpenDSSLocalBusCoordinates
+
+Table Location: mRID, name, CoordinateSystem=crs_bus
+    src_source_loc,      source_Loc
+    ln_632633_loc,       632633_Loc
+    ln_632645_loc,       632645_Loc
+    ln_632670_loc,       632670_Loc
+    ln_645646_loc,       645646_Loc
+    ln_650632_loc,       650632_Loc
+    ln_670671_loc,       670671_Loc
+    ln_671680_loc,       671680_Loc
+    ln_671684_loc,       671684_Loc
+    ln_684611_loc,       684611_Loc
+    ln_684652_loc,       684652_Loc
+    ln_692675_loc,       692675_Loc
+    sw_fuse1_loc,        Fuse1_Loc
+    sw_rec1_loc,         Rec1_Loc
+    sw_671692_loc,       671692_Loc
+    sw_brkr1_loc,        Brkr1_Loc
+    sw_sect1_loc,        Sect1_Loc
+    xf_sub3_loc,         Sub3_Loc
+    xf_xfm1_loc,         XFM1_Loc
+    xf_tpoletop_loc,     Tpoletop_Loc
+    xf_reg1_loc,         Reg1_Loc
+    xf_reg2_loc,         Reg2_Loc
+    xf_reg3_loc,         Reg3_Loc
+    ld_611_loc,          611_Loc
+    ld_634a_loc,         634a_Loc
+    ld_634b_loc,         634b_Loc
+    ld_634c_loc,         634c_Loc
+    ld_645_loc,          645_Loc
+    ld_646_loc,          646_Loc
+    ld_652_loc,          652_Loc
+    ld_670a_loc,         670a_Loc
+    ld_670b_loc,         670b_Loc
+    ld_670c_loc,         670c_Loc
+    ld_671_loc,          671_Loc
+    ld_675a_loc,         675a_Loc
+    ld_675b_loc,         675b_Loc
+    ld_675c_loc,         675c_Loc
+    ld_692_loc,          692_Loc
+    ld_house_loc,        House_Loc
+    cap_cap1_loc,        Cap1_Loc
+    cap_cap2_loc,        Cap2_Loc
+    pv_house_loc,        House_Loc
+    pv_school_loc,       School_Loc
+    storage_batidle_loc, BatIdle_Loc
+    storage_house_loc,   House_Loc
+    storage_school_loc,  School_Loc
+
+# copied: x, y of the Terminal's bus; sequenceNumber = the Terminal's
+Table PositionPoint: identifier, Location, sequenceNumber, xPosition, yPosition
+    src_source_loc_1,      src_source_loc,      1, 200.0, 400.0
+    ln_632633_loc_1,       ln_632633_loc,       1, 200.0, 250.0
+    ln_632633_loc_2,       ln_632633_loc,       2, 350.0, 250.0
+    ln_632645_loc_1,       ln_632645_loc,       1, 200.0, 250.0
+    ln_632645_loc_2,       ln_632645_loc,       2, 100.0, 250.0
+    ln_632670_loc_1,       ln_632670_loc,       1, 200.0, 245.0
+    ln_632670_loc_2,       ln_632670_loc,       2, 200.0, 200.0
+    ln_645646_loc_1,       ln_645646_loc,       1, 100.0, 250.0
+    ln_645646_loc_2,       ln_645646_loc,       2, 0.0,   250.0
+    ln_650632_loc_1,       ln_650632_loc,       1, 200.0, 300.0
+    ln_650632_loc_2,       ln_650632_loc,       2, 200.0, 250.0
+    ln_670671_loc_1,       ln_670671_loc,       1, 200.0, 200.0
+    ln_670671_loc_2,       ln_670671_loc,       2, 200.0, 100.0
+    ln_671680_loc_1,       ln_671680_loc,       1, 200.0, 100.0
+    ln_671680_loc_2,       ln_671680_loc,       2, 200.0, 0.0
+    ln_671684_loc_1,       ln_671684_loc,       1, 200.0, 100.0
+    ln_671684_loc_2,       ln_671684_loc,       2, 100.0, 100.0
+    ln_684611_loc_1,       ln_684611_loc,       1, 95.0,  100.0
+    ln_684611_loc_2,       ln_684611_loc,       2, 0.0,   100.0
+    ln_684652_loc_1,       ln_684652_loc,       1, 100.0, 100.0
+    ln_684652_loc_2,       ln_684652_loc,       2, 100.0, 0.0
+    ln_692675_loc_1,       ln_692675_loc,       1, 250.0, 100.0
+    ln_692675_loc_2,       ln_692675_loc,       2, 400.0, 100.0
+    sw_fuse1_loc_1,        sw_fuse1_loc,        1, 350.0, 250.0
+    sw_fuse1_loc_2,        sw_fuse1_loc,        2, 390.0, 250.0
+    sw_rec1_loc_1,         sw_rec1_loc,         1, 200.0, 250.0
+    sw_rec1_loc_2,         sw_rec1_loc,         2, 200.0, 245.0
+    sw_671692_loc_1,       sw_671692_loc,       1, 200.0, 100.0
+    sw_671692_loc_2,       sw_671692_loc,       2, 250.0, 100.0
+    sw_brkr1_loc_1,        sw_brkr1_loc,        1, 200.0, 350.0
+    sw_brkr1_loc_2,        sw_brkr1_loc,        2, 200.0, 325.0
+    sw_sect1_loc_1,        sw_sect1_loc,        1, 100.0, 100.0
+    sw_sect1_loc_2,        sw_sect1_loc,        2, 95.0,  100.0
+    xf_sub3_loc_1,         xf_sub3_loc,         1, 200.0, 400.0
+    xf_sub3_loc_2,         xf_sub3_loc,         2, 200.0, 350.0
+    xf_sub3_loc_3,         xf_sub3_loc,         3, 205.0, 350.0
+    xf_xfm1_loc_1,         xf_xfm1_loc,         1, 390.0, 250.0
+    xf_xfm1_loc_2,         xf_xfm1_loc,         2, 400.0, 250.0
+    xf_tpoletop_loc_1,     xf_tpoletop_loc,     1, 200.0, 200.0
+    xf_tpoletop_loc_2,     xf_tpoletop_loc,     2, 200.0, 190.0
+    xf_reg1_loc_1,         xf_reg1_loc,         1, 200.0, 325.0
+    xf_reg1_loc_2,         xf_reg1_loc,         2, 200.0, 300.0
+    xf_reg2_loc_1,         xf_reg2_loc,         1, 200.0, 325.0
+    xf_reg2_loc_2,         xf_reg2_loc,         2, 200.0, 300.0
+    xf_reg3_loc_1,         xf_reg3_loc,         1, 200.0, 325.0
+    xf_reg3_loc_2,         xf_reg3_loc,         2, 200.0, 300.0
+    ld_611_loc_1,          ld_611_loc,          1, 0.0,   100.0
+    ld_634a_loc_1,         ld_634a_loc,         1, 400.0, 250.0
+    ld_634b_loc_1,         ld_634b_loc,         1, 400.0, 250.0
+    ld_634c_loc_1,         ld_634c_loc,         1, 400.0, 250.0
+    ld_645_loc_1,          ld_645_loc,          1, 100.0, 250.0
+    ld_646_loc_1,          ld_646_loc,          1, 0.0,   250.0
+    ld_652_loc_1,          ld_652_loc,          1, 100.0, 0.0
+    ld_670a_loc_1,         ld_670a_loc,         1, 200.0, 200.0
+    ld_670b_loc_1,         ld_670b_loc,         1, 200.0, 200.0
+    ld_670c_loc_1,         ld_670c_loc,         1, 200.0, 200.0
+    ld_671_loc_1,          ld_671_loc,          1, 200.0, 100.0
+    ld_675a_loc_1,         ld_675a_loc,         1, 400.0, 100.0
+    ld_675b_loc_1,         ld_675b_loc,         1, 400.0, 100.0
+    ld_675c_loc_1,         ld_675c_loc,         1, 400.0, 100.0
+    ld_692_loc_1,          ld_692_loc,          1, 250.0, 100.0
+    ld_house_loc_1,        ld_house_loc,        1, 200.0, 190.0
+    cap_cap1_loc_1,        cap_cap1_loc,        1, 400.0, 100.0
+    cap_cap2_loc_1,        cap_cap2_loc,        1, 0.0,   100.0
+    pv_house_loc_1,        pv_house_loc,        1, 200.0, 190.0
+    pv_school_loc_1,       pv_school_loc,       1, 400.0, 250.0
+    storage_batidle_loc_1, storage_batidle_loc, 1, 400.0, 250.0
+    storage_house_loc_1,   storage_house_loc,   1, 200.0, 190.0
+    storage_school_loc_1,  storage_school_loc,  1, 400.0, 250.0
+
+Update Table PowerSystemResource: mRID, Location
+    src_source,      src_source_loc
+    ln_632633,       ln_632633_loc
+    ln_632645,       ln_632645_loc
+    ln_632670,       ln_632670_loc
+    ln_645646,       ln_645646_loc
+    ln_650632,       ln_650632_loc
+    ln_670671,       ln_670671_loc
+    ln_671680,       ln_671680_loc
+    ln_671684,       ln_671684_loc
+    ln_684611,       ln_684611_loc
+    ln_684652,       ln_684652_loc
+    ln_692675,       ln_692675_loc
+    sw_fuse1,        sw_fuse1_loc
+    sw_rec1,         sw_rec1_loc
+    sw_671692,       sw_671692_loc
+    sw_brkr1,        sw_brkr1_loc
+    sw_sect1,        sw_sect1_loc
+    xf_sub3,         xf_sub3_loc
+    xf_xfm1,         xf_xfm1_loc
+    xf_tpoletop,     xf_tpoletop_loc
+    xf_reg1,         xf_reg1_loc
+    xf_reg2,         xf_reg2_loc
+    xf_reg3,         xf_reg3_loc
+    ld_611,          ld_611_loc
+    ld_634a,         ld_634a_loc
+    ld_634b,         ld_634b_loc
+    ld_634c,         ld_634c_loc
+    ld_645,          ld_645_loc
+    ld_646,          ld_646_loc
+    ld_652,          ld_652_loc
+    ld_670a,         ld_670a_loc
+    ld_670b,         ld_670b_loc
+    ld_670c,         ld_670c_loc
+    ld_671,          ld_671_loc
+    ld_675a,         ld_675a_loc
+    ld_675b,         ld_675b_loc
+    ld_675c,         ld_675c_loc
+    ld_692,          ld_692_loc
+    ld_house,        ld_house_loc
+    cap_cap1,        cap_cap1_loc
+    cap_cap2,        cap_cap2_loc
+    pv_house,        pv_house_loc
+    pv_school,       pv_school_loc
+    storage_batidle, storage_batidle_loc
+    storage_house,   storage_house_loc
+    storage_school,  storage_school_loc

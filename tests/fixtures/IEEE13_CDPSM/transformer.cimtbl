@@ -1,0 +1,70 @@
+# OpenDSS Transformer -> PowerTransformer + PowerTransformerEnd per bus;
+# 1-phase: TransformerTank + TransformerPhaseEnd + TransformerWinding; 3-phase: balanced ends.
+# Source table: Transformer (records: 6)
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#transformer
+
+Profile = cim18v17
+
+# untranscribed: Xscarray, thermal, n, m, flrise, hsrise, normhkVA, emerghkVA, Seasons, Ratings, normamps, emergamps,
+# sub, subname, ppm_antifloat, bank, XRConst, LeadLag, Core, RdcOhms, faultrate, pct_perm, repair, basefreq, like
+Table PowerTransformer: mRID, name, EquipmentContainer, normallyInService
+    xf_sub3,     Sub3,     fdr_ieee13nodeckt,
+    # by XfmrCode CT5 (xfmrcode.cimtbl)
+    xf_tpoletop, Tpoletop, fdr_ieee13nodeckt,
+    xf_xfm1,     XFM1,     fdr_ieee13nodeckt,
+
+# 3-phase: by balanced ends
+Table PowerTransformerEnd: mRID, PowerTransformer, node, phases, endNumber, connectionKind, grounded, rground (ohm), xground (ohm), ratedU (kV), ratedS (kVA), r (percent), b (percent), g (percent), BaseVoltage
+    xf_sub3_1, xf_sub3, sourcebus, ABC,  1, D,  false, ,    ,    115.0, 5000.0, 0.0005, , , bv_115kv
+    xf_sub3_2, xf_sub3, 650,       ABCN, 2, Yn, true,  0.0, 0.4, 4.16,  5000.0, 0.0005, , , bv_4p16kv
+    xf_sub3_3, xf_sub3, 650z,      ABCN, 3, Yn, true,  ,    ,    13.2,  1000.0, 0.0005, , , bv_13p2kv
+    xf_xfm1_1, xf_xfm1, xf1,       ABCN, 1, Yn, true,  ,    ,    4.16,  500.0,  0.55,   , , bv_4p16kv
+    xf_xfm1_2, xf_xfm1, 634,       ABCN, 2, Yn, true,  ,    ,    0.48,  500.0,  0.55,   , , bv_480v
+
+# x in percent on winding 1's kVA at the From end's voltage
+Table TransformerMeshImpedance: mRID, FromTransformerEnd, ToTransformerEnd, x (percent)
+    xf_sub3_mesh_12, xf_sub3_1, xf_sub3_2, 0.01
+    xf_sub3_mesh_13, xf_sub3_1, xf_sub3_3, 0.025
+    xf_sub3_mesh_23, xf_sub3_2, xf_sub3_3, 0.025
+    xf_xfm1_mesh_12, xf_xfm1_1, xf_xfm1_2, 2.0
+
+# 1-phase by phase ends, and every instance by template (end n is the template's end n)
+Table PowerTransformerEnd: mRID, PowerTransformer, node, phases, endNumber, connectionKind, grounded, BaseVoltage
+    xf_tpoletop_1, xf_tpoletop, 670,   BN,    1, Y, true, bv_4p16kv
+    xf_tpoletop_2, xf_tpoletop, house, s1s2N, 2, I, true, bv_240v
+
+# by template: the XfmrCode's TransformerTankConfiguration (xfmrcode.cimtbl)
+Table TransformerTank: mRID, PowerTransformer, TankConfiguration
+    xf_tpoletop_tank, xf_tpoletop, xc_ct5
+
+# 1-phase by template: one per phase of each terminal; a template lug's sequenceNumber names the one it lands on, and by tank ends their order is the coil's
+Table TransformerPhaseEnd: mRID, endNumber, sequenceNumber, phase, Terminal
+    xf_tpoletop_1_B,  1, 1, B,  xf_tpoletop_T1
+    xf_tpoletop_1_N,  1, 2, N,  xf_tpoletop_T1
+    xf_tpoletop_2_s1, 2, 3, s1, xf_tpoletop_T2
+    xf_tpoletop_2_s2, 2, 4, s2, xf_tpoletop_T2
+    xf_tpoletop_2_N,  2, 5, N,  xf_tpoletop_T2
+
+# regulators (DSS-13): a Transformer a RegControl names, with equal winding kV
+Table VoltageRegulator: mRID, name, EquipmentContainer, normallyInService
+    # defaulted: conns=wye
+    xf_reg1, Reg1, fdr_ieee13nodeckt,
+    # defaulted: conns=wye
+    xf_reg2, Reg2, fdr_ieee13nodeckt,
+    # defaulted: conns=wye
+    xf_reg3, Reg3, fdr_ieee13nodeckt,
+
+# the nameplate: baseU = the coil kV, ratedS = the kVA; phase is a PhaseCode on the end's Terminal
+Table AutoTransformerEnd: mRID, AutoTransformer, node, phase, endNumber, grounded, baseU (kV), ratedS (kVA), BaseVoltage
+    xf_reg1_1, xf_reg1, brkr, AN, 1, true, 2.4, 1666.0, bv_4p16kv
+    xf_reg1_2, xf_reg1, rg60, AN, 2, true, 2.4, 1666.0, bv_4p16kv
+    xf_reg2_1, xf_reg2, brkr, BN, 1, true, 2.4, 1666.0, bv_4p16kv
+    xf_reg2_2, xf_reg2, rg60, BN, 2, true, 2.4, 1666.0, bv_4p16kv
+    xf_reg3_1, xf_reg3, brkr, CN, 1, true, 2.4, 1666.0, bv_4p16kv
+    xf_reg3_2, xf_reg3, rg60, CN, 2, true, 2.4, 1666.0, bv_4p16kv
+
+# the engine's stand-in impedance (a regulator nameplate has no %Z): r = %R1 + %R2, x = XHL, in percent on end 1's baseU and ratedS
+Table TransformerMeshImpedance: mRID, FromTransformerEnd, ToTransformerEnd, r (percent), x (percent)
+    xf_reg1_mesh_12, xf_reg1_1, xf_reg1_2, 0.01, 0.01
+    xf_reg2_mesh_12, xf_reg2_1, xf_reg2_2, 0.01, 0.01
+    xf_reg3_mesh_12, xf_reg3_1, xf_reg3_2, 0.01, 0.01

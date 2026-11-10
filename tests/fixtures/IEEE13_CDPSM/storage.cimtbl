@@ -1,0 +1,27 @@
+# OpenDSS Storage -> PowerElectronicsConnection + BatteryUnit on its bus: the snapshot dispatch (kW when set,
+# else State), in the load sign (discharge is negative p).
+# Source table: Storage (records: 3)
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#storage
+
+Profile = cim18v17
+
+# derived: p by the state (battery_dispatch): -kW or -kWrated x %Discharge discharging, kWrated x %Charge charging, idlingP waiting; capped at kVA
+Table PowerElectronicsConnection: mRID, name, node, phases, phaseConnection, ratedS (kVA), ratedU (kV), p (kW), q (kVAr), maxQ (kVAr), minQ (kVAr), maxIFault, normallyInService, BaseVoltage, EquipmentContainer=fdr_ieee13nodeckt
+    # kVA defaulted to kWrated
+    # defaulted: conn=wye, pf=1.0, pct_reserve=20.0, pct_Discharge=100.0, pct_Charge=100.0, pct_EffCharge=90.0,
+    # pct_EffDischarge=90.0, pct_IdlingkW=1.0, model=1, Vminpu=0.9, DispMode=default, enabled=true
+    storage_batidle, BatIdle, 634,   ,     Y, 100.0, 0.48,  1.0,    0.0, 100.0, -100.0, 1.1111111111111112, true, bv_480v
+    # kVA defaulted to kWrated
+    # defaulted: pf=1.0, pct_reserve=20.0, pct_Discharge=100.0, pct_Charge=100.0, pct_EffCharge=90.0,
+    # pct_EffDischarge=90.0, pct_IdlingkW=1.0, model=1, Vminpu=0.9, DispMode=default, enabled=true
+    storage_house,   House,   house, s1s2, Y, 5.0,   0.208, 5.0,    0.0, 5.0,   -5.0,   1.1111111111111112, true, bv_240v
+    # kVA defaulted to kWrated
+    # defaulted: conn=wye, pf=1.0, pct_reserve=20.0, pct_Discharge=100.0, pct_Charge=100.0, pct_EffCharge=90.0,
+    # pct_EffDischarge=90.0, pct_IdlingkW=1.0, model=1, Vminpu=0.9, DispMode=default, enabled=true
+    storage_school,  School,  634,   ,     Y, 100.0, 0.48,  -100.0, 0.0, 100.0, -100.0, 1.1111111111111112, true, bv_480v
+
+# derived: storedE = kWhstored or %stored x kWhrated; minimumE = %reserve x kWhrated; idlingP = %IdlingkW x kWrated
+Table BatteryUnit: mRID, ratedE (kWh), storedE (kWh), minimumE (kWh), maxP (kW), minP (kW), chargingEfficiency (percent), dischargingEfficiency (percent), idlingP (kW), batteryState, PowerElectronicsConnection, EquipmentContainer=fdr_ieee13nodeckt
+    storage_batidle_unit, 200.0, 100.0, 40.0, 100.0, -100.0, 90.0, 90.0, 1.0,  waiting,     storage_batidle
+    storage_house_unit,   13.5,  5.0,   2.7,  5.0,   -5.0,   90.0, 90.0, 0.05, charging,    storage_house
+    storage_school_unit,  200.0, 100.0, 40.0, 100.0, -100.0, 90.0, 90.0, 1.0,  discharging, storage_school

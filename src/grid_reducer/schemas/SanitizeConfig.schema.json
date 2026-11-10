@@ -1,0 +1,307 @@
+{
+    "$defs": {
+        "Filters": {
+            "additionalProperties": false,
+            "description": "Concepts removed from the model before anything else runs.",
+            "properties": {
+                "drop_attributes": {
+                    "description": "Class.attribute values cleared on every object of that class or a subclass, e.g. Fuse.ratedCurrent.",
+                    "items": {
+                        "pattern": "^[A-Z][A-Za-z0-9]*\\.[A-Za-z][A-Za-z0-9]*$",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "drop_classes": {
+                    "description": "CIM classes whose objects are deleted, with their subclasses and the parts they own (Terminals, phases, Locations, ...). e.g. FunctionBlock.",
+                    "items": {
+                        "pattern": "^[A-Z][A-Za-z0-9]*$",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "title": "Filters",
+            "type": "object"
+        },
+        "Layout": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "enabled": {
+                    "description": "Replace coordinates with a force-directed layout pinned at trunk branch points.",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "obfuscation": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/PrivacyLevel"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "How few trunk taps are pinned."
+                },
+                "pin_degrees": {
+                    "description": "Node degrees pinned on the trunk.",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "title": "Layout",
+            "type": "object"
+        },
+        "Noise": {
+            "additionalProperties": false,
+            "description": "The noise catalog's privacy mode for each category of values.",
+            "properties": {
+                "layout": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/PrivacyLevel"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "lines": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/PrivacyLevel"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "loads": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/PrivacyLevel"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "transformers": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/PrivacyLevel"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "title": "Noise",
+            "type": "object"
+        },
+        "OutputFormat": {
+            "description": "",
+            "enum": [
+                "cimtbl",
+                "cim_xml"
+            ],
+            "title": "OutputFormat",
+            "type": "string"
+        },
+        "PrivacyLevel": {
+            "description": "",
+            "enum": [
+                "none",
+                "low",
+                "moderate",
+                "high"
+            ],
+            "title": "PrivacyLevel",
+            "type": "string"
+        },
+        "Reduce": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "lines": {
+                    "description": "Merge series line segments between preserved nodes.",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "transformers": {
+                    "description": "Collapse service transformers and their secondaries into the primary.",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                }
+            },
+            "title": "Reduce",
+            "type": "object"
+        },
+        "SanitizeConfig": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "filters": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Filters"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "layout": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Layout"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "noise": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Noise"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "outputs": {
+                    "description": "Formats written at the end of the run; cimtbl when omitted.",
+                    "items": {
+                        "$ref": "#/$defs/OutputFormat"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "reduce": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Reduce"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "seed": {
+                    "description": "Seed for every random choice; omit for a fresh random run.",
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "source": {
+                    "description": "The model to sanitize (a .cimtbl master file), relative to the config file.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "source"
+            ],
+            "title": "SanitizeConfig",
+            "type": "object"
+        }
+    },
+    "$id": "https://w3id.org/grid-kitchen/grid-reducer/sanitize-config",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "additionalProperties": false,
+    "description": "",
+    "metamodel_version": "1.12.0",
+    "properties": {
+        "filters": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/Filters"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "layout": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/Layout"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "noise": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/Noise"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "outputs": {
+            "description": "Formats written at the end of the run; cimtbl when omitted.",
+            "items": {
+                "$ref": "#/$defs/OutputFormat"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "reduce": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/Reduce"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "seed": {
+            "description": "Seed for every random choice; omit for a fresh random run.",
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "source": {
+            "description": "The model to sanitize (a .cimtbl master file), relative to the config file.",
+            "type": "string"
+        }
+    },
+    "required": [
+        "source"
+    ],
+    "title": "sanitize_config",
+    "type": "object",
+    "version": "0.1.0"
+}
+

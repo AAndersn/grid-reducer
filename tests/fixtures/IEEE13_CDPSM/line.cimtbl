@@ -1,0 +1,82 @@
+# OpenDSS Line -> ACLineSegment (by LineCode, LineGeometry or a synthesized template) or a Switch
+# (Fuse / Recloser / LoadBreakSwitch by the control that switches it; DSS-9).
+# Source table: Line (records: 16)
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#line-and-switches
+
+Profile = cim18v17
+
+Table ACLineSegment: mRID, name, node1, node2, phases, length (ft), PerLengthImpedance, BaseVoltage, EquipmentContainer=fdr_ieee13nodeckt, normallyInService
+    ln_632633, 632633, 632,  633, ABC, 500.0,  lc_mtx602, bv_4p16kv,
+    ln_632645, 632645, 632,  645, CB,  500.0,  lc_mtx603, bv_4p16kv,
+    ln_632670, 632670, mid,  670, ABC, 667.0,  lc_mtx601, bv_4p16kv,
+    ln_645646, 645646, 645,  646, CB,  300.0,  lc_mtx603, bv_4p16kv,
+    ln_650632, 650632, rg60, 632, ABC, 2000.0, lc_mtx601, bv_4p16kv,
+    ln_670671, 670671, 670,  671, ABC, 1333.0, lc_mtx601, bv_4p16kv,
+    ln_671680, 671680, 671,  680, ABC, 1000.0, lc_mtx601, bv_4p16kv,
+    ln_671684, 671684, 671,  684, AC,  300.0,  lc_mtx604, bv_4p16kv,
+    ln_684611, 684611, tap,  611, C,   300.0,  lc_mtx605, bv_4p16kv,
+    ln_684652, 684652, 684,  652, A,   800.0,  lc_mtx607, bv_4p16kv,
+    ln_692675, 692675, 692,  675, ABC, 500.0,  lc_mtx606, bv_4p16kv,
+
+Table OperationalLimitSet: mRID, Equipment
+    # ratings: normamps from LineCode mtx602
+    ln_632633_limits, ln_632633
+    # ratings: normamps from LineCode mtx603
+    ln_632645_limits, ln_632645
+    # ratings: normamps from LineCode mtx601
+    ln_632670_limits, ln_632670
+    # ratings: normamps from LineCode mtx603
+    ln_645646_limits, ln_645646
+    # ratings: normamps from LineCode mtx601
+    ln_650632_limits, ln_650632
+    # ratings: normamps from LineCode mtx601
+    ln_670671_limits, ln_670671
+    # ratings: normamps from LineCode mtx601
+    ln_671680_limits, ln_671680
+    # ratings: normamps from LineCode mtx604
+    ln_671684_limits, ln_671684
+    # ratings: normamps from LineCode mtx605
+    ln_684611_limits, ln_684611
+    # ratings: normamps from LineCode mtx607
+    ln_684652_limits, ln_684652
+    # ratings: normamps from LineCode mtx606
+    ln_692675_limits, ln_692675
+
+Table CurrentLimit: mRID, normalValue (A), OperationalLimitType, OperationalLimitSet
+    ln_632633_norm, 340.0, olt_normal, ln_632633_limits
+    ln_632645_norm, 230.0, olt_normal, ln_632645_limits
+    ln_632670_norm, 730.0, olt_normal, ln_632670_limits
+    ln_645646_norm, 230.0, olt_normal, ln_645646_limits
+    ln_650632_norm, 730.0, olt_normal, ln_650632_limits
+    ln_670671_norm, 730.0, olt_normal, ln_670671_limits
+    ln_671680_norm, 730.0, olt_normal, ln_671680_limits
+    ln_671684_norm, 230.0, olt_normal, ln_671684_limits
+    ln_684611_norm, 230.0, olt_normal, ln_684611_limits
+    ln_684652_norm, 165.0, olt_normal, ln_684652_limits
+    ln_692675_norm, 260.0, olt_normal, ln_692675_limits
+
+# open: an Open command or the control's State; normalOpen: the control's Normal, else open
+Table Fuse: mRID, name, node1, node2, phases, ratedCurrent (A), open, normalOpen, BaseVoltage, EquipmentContainer=fdr_ieee13nodeckt, normallyInService
+    # untranscribed (a switch): r1=0.0001, x1=0.0, r0=0.0001, x0=0.0, C1=0.0, C0=0.0
+    sw_fuse1, Fuse1, 633, xf1, , 100.0, false, false, bv_4p16kv,
+
+# open: an Open command or the control's State; normalOpen: the control's Normal, else open
+Table Recloser: mRID, name, node1, node2, phases, open, normalOpen, BaseVoltage, EquipmentContainer=fdr_ieee13nodeckt, normallyInService
+    # untranscribed (a switch): r1=0.0001, x1=0.0, r0=0.0001, x0=0.0, C1=0.0, C0=0.0
+    sw_rec1, Rec1, 632, mid, , false, false, bv_4p16kv,
+
+# open: an Open command or the control's State; normalOpen: the control's Normal, else open
+Table LoadBreakSwitch: mRID, name, node1, node2, phases, open, normalOpen, BaseVoltage, EquipmentContainer=fdr_ieee13nodeckt, normallyInService
+    # untranscribed (a switch): r1=0.0001, x1=0.0, r0=0.0001, x0=0.0, C1=0.0, C0=0.0
+    sw_671692, 671692, 671, 692,  ,  false, false, bv_4p16kv,
+    # untranscribed (a switch): r1=0.0001, x1=0.0, r0=0.0001, x0=0.0, C1=0.0, C0=0.0
+    sw_brkr1,  Brkr1,  650, brkr, ,  false, false, bv_4p16kv,
+    # untranscribed (a switch): rmatrix=[0.0001], xmatrix=[0.0], cmatrix=[0.0]
+    sw_sect1,  Sect1,  684, tap,  C, false, false, bv_4p16kv,
+
+# a Recloser's Shots - 1 reclosures at its RecloseIntervals
+Table RecloseSequence: mRID, ProtectedSwitch, recloseStep, recloseDelay (s)
+    # defaulted: Shots=4, RecloseIntervals=(0.5 2.0 2.0)
+    sw_rec1_rs1, sw_rec1, 1, 0.5
+    sw_rec1_rs2, sw_rec1, 2, 2.0
+    sw_rec1_rs3, sw_rec1, 3, 2.0

@@ -1,0 +1,32 @@
+# OpenDSS XfmrCode -> TransformerTankConfiguration (catalog). A center-tap code is a tank with lugs and
+# windings lug to lug; any other a TransformerTankEnd per winding. Built from the instances that use it.
+# Source table: XfmrCode (records: 1)
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#xfmrcode
+
+Profile = cim18v17
+
+# derived: noLoadLoss = pct_noloadloss / 100 x winding 1 kVA
+Table TransformerTankConfiguration: mRID, name, percentMagnetizingCurrent (percent), noLoadLoss (kW)
+    # defaulted: conns=wye
+    # built from 1 instance (Tpoletop, ...)
+    xc_ct5, CT5, 0.5, 0.01
+
+# IEEE C57.12.70 designations; sequenceNumber = the instance phase end the lug lands on
+Table TransformerLug: mRID, TankConfiguration, designation, sequenceNumber
+    xc_ct5_lug_h1, xc_ct5, H1, 1
+    xc_ct5_lug_h2, xc_ct5, H2, 2
+    xc_ct5_lug_x1, xc_ct5, X1, 3
+    xc_ct5_lug_x2, xc_ct5, X2, 5
+    xc_ct5_lug_x3, xc_ct5, X3, 4
+
+# from the polarity end: H1->H2, X1->X2 (s1->N), X2->X3 (N->s2); a half's ratedS = kVA / 2
+Table TransformerWinding: mRID, TankConfiguration, ratedU (kV), baseU (kV), ratedS (kVA), baseS (kVA), r (percent), FromTransformerLug, ToTransformerLug
+    xc_ct5_wdg_1, xc_ct5, 4.156921938165305, 2.4,  5.0, 5.0, 0.6, xc_ct5_lug_h1, xc_ct5_lug_h2
+    xc_ct5_wdg_2, xc_ct5, 0.24,              0.12, 2.5, 5.0, 1.2, xc_ct5_lug_x1, xc_ct5_lug_x2
+    xc_ct5_wdg_3, xc_ct5, 0.24,              0.12, 2.5, 5.0, 1.2, xc_ct5_lug_x2, xc_ct5_lug_x3
+
+# x in percent on the From winding's baseU and baseS
+Table TransformerMeshImpedance: mRID, FromWinding, ToWinding, x (percent)
+    xc_ct5_mesh_12, xc_ct5_wdg_1, xc_ct5_wdg_2, 2.04
+    xc_ct5_mesh_13, xc_ct5_wdg_1, xc_ct5_wdg_3, 2.04
+    xc_ct5_mesh_23, xc_ct5_wdg_2, xc_ct5_wdg_3, 1.36

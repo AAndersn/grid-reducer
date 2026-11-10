@@ -1,0 +1,10 @@
+# OpenDSS Vsource -> EnergySource on its bus.
+# Source table: Vsource (records: 1)
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#vsource
+
+Profile = cim18v17
+
+# untranscribed: frequency, ScanType, Sequence, Yearly, Daily, Duty, Model, puZideal, spectrum, basefreq, like
+Table EnergySource: mRID, name, node, phases, nominalVoltage (kV), voltageMagnitude (kV), voltageAngle (deg), r (ohm), x (ohm), r0 (ohm), x0 (ohm), normallyInService, BaseVoltage, EquipmentContainer=sub_ieee13nodeckt
+    # derived from MVAsc3=20000.0, MVAsc1=21000.0; defaulted: x1r1=4.0, x0r0=3.0
+    src_source, source, sourcebus, , 115.0, 115.0, 30.0, 0.16037668205527517, 0.6415067282211007, 0.17960358301233556, 0.5388107490370067, , bv_115kv

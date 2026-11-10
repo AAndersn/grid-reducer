@@ -12,88 +12,39 @@ We recommend using a Python virtual environment for a clean install 🔒🐍.
 
 This software is being provided as a prototype only. For your intended use, it is your responsibility to independently validate the results in accordance with your applicable software quality assurance program.
 
-## 🧪 Step 1: Set Up a Python Environment
+## Status: CIM rewrite in progress
 
-To avoid dependency conflicts, create and activate a virtual environment.
+grid-reducer is being rewritten to work on CIM models (cim18v17) instead of OpenDSS decks. It reads a
+`.cimtbl` model (from [cim-tables](https://github.com/PNNL-CIM-Tools/CIM-Tables); other formats go
+through a CIMHub importer first) and runs a fixed sequence of passes chosen by a config file:
 
-You can use any tool of your choice — here are a few popular options:
+| Pass | Status |
+|------|--------|
+| filter: drop CIM classes (with the parts they own) and attributes | done |
+| reduce transformers, reduce lines | planned |
+| layout (force-directed, pinned at trunk branch points) | planned |
+| noise (grid-meta noise catalog) | planned |
+| rename, validate | planned |
 
-<details> <summary><strong>🟢 Option A: Using <code>venv</code> (Standard Library)</strong></summary>
-
-```bash
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-</details> <details> <summary><strong>🔵 Option B: Using <code>conda</code></strong></summary>
-
-```bash
-conda create -n grid-reducer-env python=3.11
-conda activate grid-reducer-env
-```
-
-</details>
-
-## 🚀 Step 2: Install the Project Locally
-
-Install the project:
+The dependencies are not all released yet: `pyproject.toml` points uv at sibling checkouts of
+CIM-Graph, CIM-Profiles and CIM-Tables.
 
 ```bash
-pip install grid_reducer
+uv sync --extra dev
+uv run grid sanitize examples/sanitize.example.yaml --run-dir runs/example
 ```
 
-✅ This will also install all required dependencies.
-
-## 🛠 Example CLI Usage
-
-Once installed, you can use command line interface. Run `grid --help` to see all the available command options.
-
-Here is a minimal example to reduce OpenDSS model.
-
-```bash
-grid reduce -f Master.dss
-```
-
-## Example Python Usage
-
-You can also reduce the feeder model through python scripts.
-
-Here is a minimal example to reduce OpenDSS feeder model using Python Script.
+The config schema is `src/grid_reducer/schemas/sanitize_config.linkml.yaml`; `codegen.sh` regenerates
+the pydantic models and JSON Schema from it. A run directory holds a `.cimtbl` snapshot and a
+`report.json` after every pass, plus `run.json` and the outputs. It contains the original model, so
+keep it where the model owner keeps the source.
 
 ```python
-from pathlib import Path
+from grid_reducer.config import load_config
+from grid_reducer.pipeline import run_pipeline
 
-from grid_reducer.reducer import OpenDSSModelReducer
-
-file_path = "master.dss"
-reducer = OpenDSSModelReducer(master_dss_file=file_path)
-reduced_ckt = reducer.reduce(transform_coordinate=True)
-
-out_folder = Path("outputs")
-out_folder.mkdir(parents=True, exist_ok=True)
-original_circuit_file = out_folder / "original_ckt.dss"
-reduced_circuit_file = out_folder / "reduced_ckt.dss"
-reducer.export_original_ckt(original_circuit_file)
-reducer.export(reduced_ckt, reduced_circuit_file)
+summary = run_pipeline(load_config("sanitize.yaml"), "runs/feeder_1", on_progress=print)
 ```
-
-## 📌 Notes
-
-* This is the recommended way to use the project:
-
-```bash
-pip install grid-reducer
-```
-
-* If you want your local changes to the code to be applied immediately (without needing to reinstall your package each time), use an “editable” install by running:
-
-```bash
-pip install -e .
-```
-
-Stay tuned for updates! 📬
-
-Need help? Feel free to open an issue or reach out to the maintainers. 💬
 
 ## Attribution and Disclaimer
 

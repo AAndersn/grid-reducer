@@ -1,0 +1,116 @@
+id: https://w3id.org/grid-kitchen/grid-reducer/sanitize-config
+name: sanitize_config
+title: Grid Reducer Sanitize Config
+description: >-
+  What grid-reducer does to a feeder model before it is shared: which concepts to drop, whether to
+  reduce transformers and lines, how much noise each category of values gets, and what to write.
+  The passes always run in one order: filter, reduce transformers, reduce lines, layout, noise,
+  rename, validate, write.
+license: BSD-3-Clause
+version: 0.1.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  gridreducer: https://w3id.org/grid-kitchen/grid-reducer/
+default_prefix: gridreducer
+default_range: string
+imports:
+  - linkml:types
+
+classes:
+  SanitizeConfig:
+    tree_root: true
+    attributes:
+      source:
+        required: true
+        description: The model to sanitize (a .cimtbl master file), relative to the config file.
+      seed:
+        range: integer
+        description: Seed for every random choice; omit for a fresh random run.
+      filters:
+        range: Filters
+        inlined: true
+      reduce:
+        range: Reduce
+        inlined: true
+      layout:
+        range: Layout
+        inlined: true
+      noise:
+        range: Noise
+        inlined: true
+      outputs:
+        range: OutputFormat
+        multivalued: true
+        description: Formats written at the end of the run; cimtbl when omitted.
+
+  Filters:
+    description: Concepts removed from the model before anything else runs.
+    attributes:
+      drop_classes:
+        multivalued: true
+        pattern: "^[A-Z][A-Za-z0-9]*$"
+        description: >-
+          CIM classes whose objects are deleted, with their subclasses and the parts they own
+          (Terminals, phases, Locations, ...). e.g. FunctionBlock.
+      drop_attributes:
+        multivalued: true
+        pattern: "^[A-Z][A-Za-z0-9]*\\.[A-Za-z][A-Za-z0-9]*$"
+        description: >-
+          Class.attribute values cleared on every object of that class or a subclass, e.g.
+          Fuse.ratedCurrent.
+
+  Reduce:
+    attributes:
+      transformers:
+        range: boolean
+        ifabsent: "false"
+        description: Collapse service transformers and their secondaries into the primary.
+      lines:
+        range: boolean
+        ifabsent: "false"
+        description: Merge series line segments between preserved nodes.
+
+  Layout:
+    attributes:
+      enabled:
+        range: boolean
+        ifabsent: "false"
+        description: Replace coordinates with a force-directed layout pinned at trunk branch points.
+      pin_degrees:
+        range: integer
+        multivalued: true
+        description: Node degrees pinned on the trunk.
+      obfuscation:
+        range: PrivacyLevel
+        ifabsent: PrivacyLevel(moderate)
+        description: How few trunk taps are pinned.
+
+  Noise:
+    description: The noise catalog's privacy mode for each category of values.
+    attributes:
+      transformers:
+        range: PrivacyLevel
+        ifabsent: PrivacyLevel(none)
+      lines:
+        range: PrivacyLevel
+        ifabsent: PrivacyLevel(none)
+      loads:
+        range: PrivacyLevel
+        ifabsent: PrivacyLevel(none)
+      layout:
+        range: PrivacyLevel
+        ifabsent: PrivacyLevel(none)
+
+enums:
+  PrivacyLevel:
+    permissible_values:
+      none:
+        description: Values are published unchanged.
+      low:
+      moderate:
+      high:
+
+  OutputFormat:
+    permissible_values:
+      cimtbl:
+      cim_xml:

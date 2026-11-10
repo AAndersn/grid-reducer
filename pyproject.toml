@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "grid_reducer"
 dynamic = ["version"]
-description = 'A repository for performing network reduction on distribution network model.'
+description = "Reduce and anonymize CIM distribution feeder models for sharing."
 readme = "README.md"
 requires-python = ">=3.11"
 license = "BSD-3-Clause"
@@ -22,20 +22,13 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-  "networkx~=3.5",
-  "OpenDSSDirect.py~=0.9.4",
-  "matplotlib~=3.10.3",
-  "fsspec~=2025.5.1",
-  "s3fs~=2025.5.1",
-  "pydantic~=2.11.5",
-  "pint~=0.24.4",
+  "cim-graph>=0.6.0a2,<0.7",
+  "cim-profiles>=0.1.0a2,<0.2",
+  "cim-tables>=0.1.0a1,<0.2",
   "click~=8.2.1",
-  "scipy~=1.15.3",
-  "geopandas~=1.1.0",
-  "mapclassify~=2.9.0",
-  "rich~=14.0.0",
-  "tqdm~=4.67.1",
-  "scikit-learn~=1.7.2",
+  "jsonschema~=4.24",
+  "pydantic~=2.11",
+  "pyyaml~=6.0.2",
 ]
 
 [project.optional-dependencies]
@@ -43,7 +36,6 @@ dev = [
   "pre-commit~=4.2.0", 
   "pytest~=9.0.1", 
   "ruff~=0.11.12",
-  "pytest-mock~=3.14.1",
   "pytest-cov~=7.0.0"
 ]
 doc = [
@@ -53,7 +45,7 @@ doc = [
 
 
 [tool.ruff]
-exclude = [".git", ".ruff_cache", ".venv", "_build", "build", "dist", "venv", "altdss"]
+exclude = [".git", ".ruff_cache", ".venv", "_build", "build", "dist", "venv", "src/grid_reducer/config_models.py"]
 line-length = 99
 indent-width = 4
 target-version = "py311"
@@ -72,7 +64,7 @@ ignore = ["C901"]
 per-file-ignores = { "__init__.py" = ["F401"] }
 
 [project.scripts]
-grid = "grid_reducer.cli.cli:cli"
+grid = "grid_reducer.cli:cli"
 
 [tool.ruff.format]
 quote-style = "double"
@@ -89,6 +81,15 @@ Source = "https://github.com/Grid-Kitchen/grid-reducer"
 
 [tool.hatch.version]
 path = "src/grid_reducer/version.py"
+
+[tool.uv]
+prerelease = "allow"
+
+# Not on PyPI yet (or the release lacks what grid-reducer needs): the sibling checkouts.
+[tool.uv.sources]
+cim-graph = { path = "../CIM-Graph", editable = true }
+cim-profiles = { path = "../CIM-Profiles", editable = true }
+cim-tables = { path = "../CIM-Tables", editable = true }
 
 [tool.hatch.metadata]
 allow-direct-references = true

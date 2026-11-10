@@ -1,0 +1,13 @@
+# grid-reducer sanitize config (schema: src/grid_reducer/schemas/sanitize_config.linkml.yaml)
+source: ../tests/fixtures/IEEE13_CDPSM/IEEE13_CDPSM.cimtbl
+seed: 1234
+filters:
+  drop_classes: [FunctionBlock, ProtectionFunctionBlock, RecloseSequence]
+  drop_attributes: [Fuse.ratedCurrent, IdentifiedObject.description]
+reduce:
+  transformers: false   # not implemented yet
+  lines: false          # not implemented yet
+noise:                  # none | low | moderate | high; only none until the noise pass exists
+  transformers: none
+  lines: none
+outputs: [cimtbl, cim_xml]

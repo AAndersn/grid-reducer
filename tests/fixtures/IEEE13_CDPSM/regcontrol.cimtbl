@@ -1,0 +1,27 @@
+# OpenDSS RegControl -> TapChangerControl + RatioTapChanger on the controlled end (DSS-13).
+# Settings on the 120 V PT secondary are primary volts (x ptratio); line drop ohms = volts x ptratio / CTprim.
+# Source table: RegControl (records: 3)
+# Mapping: cimhub_opendss/docs/CIMTBL_MAPPING.md#regcontrol
+
+Profile = cim18v17
+
+# derived: targetValue/Deadband = vreg/band x ptratio (secondary_to_primary), primary volts (plain floats in cim18v17); lineDropR/X = R/X x ptratio / CTprim (line_drop_ohms); the reverse settings the same way
+Table TapChangerControl: mRID, name, mode=voltage, discrete=true, enabled, monitoredPhase, ptRatio, targetValue, targetDeadband, lineDropCompensation, lineDropR (ohm), lineDropX (ohm), reversible, reverseTargetValue, reverseTargetDeadband, reverseLineDropR (ohm), reverseLineDropX (ohm), reversingPowerThreshold (kW), reversingDelay (s), reverseToNeutral, Terminal
+    # defaulted: PTphase=1, delay=15.0, tapdelay=2.0, reversible=false, revvreg=120.0, revband=3.0, revR=0.0, revX=0.0,
+    # revThreshold=100.0, revDelay=60.0, revNeutral=false, enabled=true
+    # defaulted: Transformer Reg1 MaxTap=1.1, MinTap=0.9, NumTaps=32
+    rc_reg1, Reg1, true, A, 20.0, 2440.0, 40.0, true, 0.08571428571428572, 0.2571428571428571, false, 2400.0, 60.0, 0.0, 0.0, 100.0, 60.0, false, xf_reg1_T2
+    # defaulted: PTphase=1, delay=15.0, tapdelay=2.0, reversible=false, revvreg=120.0, revband=3.0, revR=0.0, revX=0.0,
+    # revThreshold=100.0, revDelay=60.0, revNeutral=false, enabled=true
+    # defaulted: Transformer Reg2 MaxTap=1.1, MinTap=0.9, NumTaps=32
+    rc_reg2, Reg2, true, B, 20.0, 2440.0, 40.0, true, 0.08571428571428572, 0.2571428571428571, false, 2400.0, 60.0, 0.0, 0.0, 100.0, 60.0, false, xf_reg2_T2
+    # defaulted: PTphase=1, delay=15.0, tapdelay=2.0, reversible=false, revvreg=120.0, revband=3.0, revR=0.0, revX=0.0,
+    # revThreshold=100.0, revDelay=60.0, revNeutral=false, enabled=true
+    # defaulted: Transformer Reg3 MaxTap=1.1, MinTap=0.9, NumTaps=32
+    rc_reg3, Reg3, true, C, 20.0, 2440.0, 40.0, true, 0.08571428571428572, 0.2571428571428571, false, 2400.0, 60.0, 0.0, 0.0, 100.0, 60.0, false, xf_reg3_T2
+
+# derived from the transformer's MaxTap, MinTap, NumTaps and its tap on the controlled winding (tap_range): increment = (MaxTap - MinTap) / NumTaps, step = (tap - 1) / increment; neutralU = the winding kV; ctRating = CTprim (A, a plain float); ctRatio = CTprim / 0.2 A (ct_ratio)
+Table RatioTapChanger: mRID, name, TransformerEnd, TapChangerControl, lowStep, highStep, neutralStep=0, step, stepVoltageIncrement (percent), neutralU (kV), ltcFlag=true, controlEnabled, ptRatio, ctRating, ctRatio, initialDelay (s), subsequentDelay (s)
+    rc_reg1_tap, Reg1, xf_reg1_2, rc_reg1, -16, 16, 10, 0.625, 2.4, true, 20.0, 700.0, 3500.0, 15.0, 2.0
+    rc_reg2_tap, Reg2, xf_reg2_2, rc_reg2, -16, 16, 8,  0.625, 2.4, true, 20.0, 700.0, 3500.0, 15.0, 2.0
+    rc_reg3_tap, Reg3, xf_reg3_2, rc_reg3, -16, 16, 11, 0.625, 2.4, true, 20.0, 700.0, 3500.0, 15.0, 2.0
