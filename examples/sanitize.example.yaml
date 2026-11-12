@@ -10,4 +10,6 @@ reduce:
 noise:                  # none | low | moderate | high; only none until the noise pass exists
   transformers: none
   lines: none
+rename:                 # on unless turned off; the outputs are named model_name
+  model_name: ieee13_sanitized
 outputs: [cimtbl, cim_xml]

@@ -111,6 +111,7 @@ class SanitizeConfig(ConfiguredBaseModel):
     reduce: Optional[Reduce] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['SanitizeConfig']} })
     layout: Optional[Layout] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['SanitizeConfig', 'Noise']} })
     noise: Optional[Noise] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['SanitizeConfig']} })
+    rename: Optional[Rename] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['SanitizeConfig']} })
     outputs: Optional[list[OutputFormat]] = Field(default=None, description="""Formats written at the end of the run; cimtbl when omitted.""", json_schema_extra = { "linkml_meta": {'domain_of': ['SanitizeConfig']} })
 
 
@@ -160,7 +161,7 @@ class Reduce(ConfiguredBaseModel):
 class Layout(ConfiguredBaseModel):
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'from_schema': 'https://w3id.org/grid-kitchen/grid-reducer/sanitize-config'})
 
-    enabled: Optional[bool] = Field(default=False, description="""Replace coordinates with a force-directed layout pinned at trunk branch points.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Layout'], 'ifabsent': 'false'} })
+    enabled: Optional[bool] = Field(default=False, description="""Replace coordinates with a force-directed layout pinned at trunk branch points.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Layout', 'Rename'], 'ifabsent': 'false'} })
     pin_degrees: Optional[list[int]] = Field(default=None, description="""Node degrees pinned on the trunk.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Layout']} })
     obfuscation: Optional[PrivacyLevel] = Field(default=PrivacyLevel("moderate"), description="""How few trunk taps are pinned.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Layout'], 'ifabsent': 'PrivacyLevel(moderate)'} })
 
@@ -177,6 +178,26 @@ class Noise(ConfiguredBaseModel):
     layout: Optional[PrivacyLevel] = Field(default=PrivacyLevel("none"), json_schema_extra = { "linkml_meta": {'domain_of': ['SanitizeConfig', 'Noise'], 'ifabsent': 'PrivacyLevel(none)'} })
 
 
+class Rename(ConfiguredBaseModel):
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'from_schema': 'https://w3id.org/grid-kitchen/grid-reducer/sanitize-config'})
+
+    enabled: Optional[bool] = Field(default=True, description="""Replace every name and identifier with canonical ones; turn off only to inspect a run, since the output then carries the source's names.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Layout', 'Rename'], 'ifabsent': 'true'} })
+    model_name: Optional[str] = Field(default="feeder", description="""The published Model name, and the output files' name.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Rename'], 'ifabsent': 'string(feeder)'} })
+
+    @field_validator('model_name')
+    def pattern_model_name(cls, v):
+        pattern=re.compile(r"^[A-Za-z][A-Za-z0-9_-]*$")
+        if isinstance(v, list):
+            for element in v:
+                if isinstance(element, str) and not pattern.search(element):
+                    err_msg = f"Invalid model_name format: {element}"
+                    raise ValueError(err_msg)
+        elif isinstance(v, str) and not pattern.search(v):
+            err_msg = f"Invalid model_name format: {v}"
+            raise ValueError(err_msg)
+        return v
+
+
 # Model rebuild
 # see https://pydantic-docs.helpmanual.io/usage/models/#rebuilding-a-model
 SanitizeConfig.model_rebuild()
@@ -184,3 +205,4 @@ Filters.model_rebuild()
 Reduce.model_rebuild()
 Layout.model_rebuild()
 Noise.model_rebuild()
+Rename.model_rebuild()

@@ -24,7 +24,8 @@ through a CIMHub importer first) and runs a fixed sequence of passes chosen by a
 | reduce transformers, reduce lines | planned |
 | layout (force-directed, pinned at trunk branch points) | planned |
 | noise (grid-meta noise catalog) | planned |
-| rename, validate | planned |
+| rename: compact CIMTBL-Models mRIDs (`cn_0001`, `ln_0001`, `ln_0001_T1`) numbered along a LinkNet walk from the source, names cleared, new UUIDs and model scope | done |
+| validate | planned |
 
 The dependencies are not all released yet: `pyproject.toml` points uv at sibling checkouts of
 CIM-Graph, CIM-Profiles and CIM-Tables.

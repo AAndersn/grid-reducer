@@ -286,6 +286,31 @@ requires-dist = [
 dev = [{ name = "pytest", specifier = ">=8.3.5" }]
 
 [[package]]
+name = "cim-topology"
+version = "0.1.0"
+source = { editable = "../CIM-Graph-Topology-Processor" }
+dependencies = [
+    { name = "cim-graph" },
+    { name = "cim-profiles" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "cim-graph", editable = "../CIM-Graph" },
+    { name = "cim-profiles", editable = "../CIM-Profiles" },
+    { name = "gridappsd-python", marker = "extra == 'gridappsd'" },
+]
+provides-extras = ["gridappsd"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "cim-tables", editable = "../CIM-Tables" },
+    { name = "ipykernel", specifier = ">=6.25.1" },
+    { name = "pre-commit", specifier = ">=2.17.0" },
+    { name = "pytest", specifier = ">=8.3.5" },
+]
+
+[[package]]
 name = "click"
 version = "8.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -502,6 +527,7 @@ dependencies = [
     { name = "cim-graph" },
     { name = "cim-profiles" },
     { name = "cim-tables" },
+    { name = "cim-topology" },
     { name = "click" },
     { name = "jsonschema" },
     { name = "pydantic" },
@@ -525,6 +551,7 @@ requires-dist = [
     { name = "cim-graph", editable = "../CIM-Graph" },
     { name = "cim-profiles", editable = "../CIM-Profiles" },
     { name = "cim-tables", editable = "../CIM-Tables" },
+    { name = "cim-topology", editable = "../CIM-Graph-Topology-Processor" },
     { name = "click", specifier = "~=8.2.1" },
     { name = "jsonschema", specifier = "~=4.24" },
     { name = "mike", marker = "extra == 'doc'", specifier = "~=2.1.3" },

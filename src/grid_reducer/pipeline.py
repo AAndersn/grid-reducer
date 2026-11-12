@@ -5,7 +5,9 @@ A run directory holds everything a UI needs to show and compare the steps::
     run.json             the resolved config and one entry per pass
     00_source/           the model as loaded: .cimtbl files and report.json (class counts)
     01_filter/           the model after the filter pass, and that pass's report
-    output/              the final model in each requested format
+    02_rename/           ... one directory per pass that ran
+    output/              the final model in each requested format, named rename.model_name
+                         (.cimtbl with Terminals and phases folded into node/phases columns)
 
 The run directory holds the original model, so it stays where the model owner keeps it.
 """
@@ -17,7 +19,7 @@ from pathlib import Path
 
 from cimgraph.models import GraphModel
 
-from grid_reducer import filters, model_io
+from grid_reducer import filters, model_io, rename
 from grid_reducer.config_models import SanitizeConfig
 
 
@@ -35,6 +37,12 @@ PASSES = (
         enabled=lambda config: bool(config.filters.drop_classes or config.filters.drop_attributes),
         check=lambda config: filters.check(config.filters),
         run=lambda model, config: filters.run(model, config.filters),
+    ),
+    Pass(
+        "rename",
+        enabled=lambda config: config.rename.enabled,
+        check=lambda config: None,
+        run=lambda model, config: rename.run(model, config.rename, config.seed),
     ),
 )
 
@@ -62,7 +70,8 @@ def run_pipeline(
         )
 
     on_progress("writing outputs")
-    outputs = _write_outputs(model, name, config.outputs, run_dir / "output")
+    output_name = config.rename.model_name if config.rename.enabled else name
+    outputs = _write_outputs(model, output_name, config.outputs, run_dir / "output")
     summary = {"config": config.model_dump(mode="json"), "steps": steps, "outputs": outputs}
     (run_dir / "run.json").write_text(json.dumps(summary, indent=2) + "\n")
     return summary
@@ -80,7 +89,7 @@ def _write_outputs(model: GraphModel, name: str, formats: list[str], directory: 
     written = []
     for output_format in formats:
         if output_format == "cimtbl":
-            path = model_io.write_cimtbl(model, name, directory / "cimtbl")
+            path = model_io.write_cimtbl(model, name, directory / "cimtbl", terminals="folded")
         elif output_format == "cim_xml":
             path = model_io.write_cim_xml(model, directory / f"{name}.xml")
         else:

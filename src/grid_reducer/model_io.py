@@ -19,13 +19,17 @@ def load_model(path: Path) -> GraphModel:
     return cimtables.load_model(path)
 
 
-def write_cimtbl(model: GraphModel, name: str, directory: Path) -> Path:
+def write_cimtbl(
+    model: GraphModel, name: str, directory: Path, terminals: str = "explicit"
+) -> Path:
     """Write the model as .cimtbl files in a new directory; returns the master file.
 
-    Terminals are written explicitly so their mRIDs survive a reload unchanged.
+    terminals="explicit" writes every Terminal and phase child as its own row, so any mRIDs survive
+    a reload. "folded" puts them in node/phases columns; a reload gives them the loader's mRIDs
+    (``<equipment>_T<n>``, ``<equipment>_<phase>``), which the rename pass already gave them.
     """
     directory.mkdir(parents=True)
-    documents = cimtables.to_documents(model, name, terminals="explicit")
+    documents = cimtables.to_documents(model, name, terminals=terminals)
     return document.write_documents(documents, directory)
 
 

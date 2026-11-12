@@ -156,6 +156,29 @@
             "title": "Reduce",
             "type": "object"
         },
+        "Rename": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "enabled": {
+                    "description": "Replace every name and identifier with canonical ones; turn off only to inspect a run, since the output then carries the source's names.",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "model_name": {
+                    "description": "The published Model name, and the output files' name.",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "Rename",
+            "type": "object"
+        },
         "SanitizeConfig": {
             "additionalProperties": false,
             "description": "",
@@ -204,6 +227,16 @@
                     "anyOf": [
                         {
                             "$ref": "#/$defs/Reduce"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "rename": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Rename"
                         },
                         {
                             "type": "null"
@@ -279,6 +312,16 @@
             "anyOf": [
                 {
                     "$ref": "#/$defs/Reduce"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "rename": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/Rename"
                 },
                 {
                     "type": "null"

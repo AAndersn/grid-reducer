@@ -38,6 +38,9 @@ classes:
       noise:
         range: Noise
         inlined: true
+      rename:
+        range: Rename
+        inlined: true
       outputs:
         range: OutputFormat
         multivalued: true
@@ -100,6 +103,19 @@ classes:
       layout:
         range: PrivacyLevel
         ifabsent: PrivacyLevel(none)
+
+  Rename:
+    attributes:
+      enabled:
+        range: boolean
+        ifabsent: "true"
+        description: >-
+          Replace every name and identifier with canonical ones; turn off only to inspect a run,
+          since the output then carries the source's names.
+      model_name:
+        pattern: "^[A-Za-z][A-Za-z0-9_-]*$"
+        ifabsent: string(feeder)
+        description: The published Model name, and the output files' name.
 
 enums:
   PrivacyLevel:

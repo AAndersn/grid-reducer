@@ -4,7 +4,15 @@ from pathlib import Path
 
 import yaml
 
-from grid_reducer.config_models import Filters, Layout, Noise, OutputFormat, Reduce, SanitizeConfig
+from grid_reducer.config_models import (
+    Filters,
+    Layout,
+    Noise,
+    OutputFormat,
+    Reduce,
+    Rename,
+    SanitizeConfig,
+)
 
 
 def load_config(path: Path | str) -> SanitizeConfig:
@@ -27,6 +35,7 @@ def parse_config(data: dict, base_dir: Path) -> SanitizeConfig:
             "reduce": config.reduce or Reduce(),
             "layout": config.layout or Layout(),
             "noise": config.noise or Noise(),
+            "rename": config.rename or Rename(),
             "outputs": config.outputs or [OutputFormat.cimtbl.value],
         }
     )

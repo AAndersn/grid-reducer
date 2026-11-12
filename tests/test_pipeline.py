@@ -23,7 +23,7 @@ def test_run_writes_a_snapshot_per_pass(tmp_path, make_config):
     summary = run_pipeline(config, tmp_path / "run")
 
     run = tmp_path / "run"
-    assert [step["step"] for step in summary["steps"]] == ["00_source", "01_filter"]
+    assert [step["step"] for step in summary["steps"]] == ["00_source", "01_filter", "02_rename"]
     assert json.loads((run / "run.json").read_text()) == summary
     source = cimtables.load_model(run / summary["steps"][0]["master"])
     filtered = cimtables.load_model(run / summary["steps"][1]["master"])
@@ -32,14 +32,25 @@ def test_run_writes_a_snapshot_per_pass(tmp_path, make_config):
     assert json.loads((run / "01_filter" / "report.json").read_text())["deleted"] == {
         "Recloser": 1
     }
-    assert (run / "output" / "IEEE13_CDPSM.xml").stat().st_size > 0
+    assert summary["outputs"] == ["output/cimtbl/feeder.cimtbl", "output/feeder.xml"]
+    renamed = cimtables.load_model(run / summary["steps"][2]["master"])
     output = cimtables.load_model(run / summary["outputs"][0])
-    assert cimtables.diff_models(filtered, output) == []
+    assert cimtables.diff_models(renamed, output) == []
+    written = [path.read_text() for path in (run / "output").rglob("*") if path.is_file()]
+    assert not any("ieee13" in text.lower() for text in written)
+    cimtbl = "\n".join(path.read_text() for path in (run / "output" / "cimtbl").glob("*.cimtbl"))
+    assert "Table Terminal:" not in cimtbl
+    assert "Table ACLineSegmentPhase:" not in cimtbl
+
+
+def test_rename_can_be_turned_off(tmp_path, make_config):
+    summary = run_pipeline(make_config(rename={"enabled": False}), tmp_path / "run")
+    assert [step["step"] for step in summary["steps"]] == ["00_source"]
+    assert summary["outputs"] == ["output/cimtbl/IEEE13_CDPSM.cimtbl"]
 
 
 def test_source_snapshot_matches_source(tmp_path, make_config, ieee13_path):
     summary = run_pipeline(make_config(), tmp_path / "run")
-    assert [step["step"] for step in summary["steps"]] == ["00_source"]
     snapshot = cimtables.load_model(tmp_path / "run" / summary["steps"][0]["master"])
     assert cimtables.diff_models(cimtables.load_model(ieee13_path), snapshot) == []
 

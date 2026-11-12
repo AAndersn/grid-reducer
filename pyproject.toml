@@ -25,6 +25,7 @@ dependencies = [
   "cim-graph>=0.6.0a2,<0.7",
   "cim-profiles>=0.1.0a2,<0.2",
   "cim-tables>=0.1.0a1,<0.2",
+  "cim-topology>=0.1.0,<0.2",
   "click~=8.2.1",
   "jsonschema~=4.24",
   "pydantic~=2.11",
@@ -90,6 +91,7 @@ prerelease = "allow"
 cim-graph = { path = "../CIM-Graph", editable = true }
 cim-profiles = { path = "../CIM-Profiles", editable = true }
 cim-tables = { path = "../CIM-Tables", editable = true }
+cim-topology = { path = "../CIM-Graph-Topology-Processor", editable = true }
 
 [tool.hatch.metadata]
 allow-direct-references = true
